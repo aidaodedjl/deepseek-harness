@@ -71,15 +71,26 @@ describe('RepositoryCleaner', () => {
   it('removes types-only test aggregate outputs declared as *-types outDirs', async () => {
     const root = fixture()
     write(join(root, 'apps/desktop/src/keyboard.ts'), 'export {}\n')
-    write(join(root, 'tsconfig.json'), JSON.stringify({
+    write(join(root, 'tsconfig.client.json'), JSON.stringify({
+      files: [],
+      references: [{ path: './tsconfig.desktop-keyboard-tests.json' }],
+    }))
+    write(join(root, 'tsconfig.desktop-keyboard-tests.json'), JSON.stringify({
       compilerOptions: { outDir: 'lib/desktop-keyboard-test-types' },
       files: ['apps/desktop/src/keyboard.ts'],
     }))
+    write(join(root, 'tsconfig.json'), JSON.stringify({
+      files: [],
+      references: [{ path: './tsconfig.client.json' }],
+    }))
     write(join(root, 'lib/desktop-keyboard-test-types/apps/desktop/src/keyboard.d.ts'))
+    write(join(root, 'lib/keep.json'))
 
-    await new RepositoryCleaner(root).clean()
+    const removed = await new RepositoryCleaner(root).clean()
 
+    expect(removed).toEqual(['lib/desktop-keyboard-test-types'])
     expect(existsSync(join(root, 'lib/desktop-keyboard-test-types'))).toBe(false)
+    expect(existsSync(join(root, 'lib/keep.json'))).toBe(true)
   })
 
   it('removes the native Landlock entry output and solution build info', async () => {
