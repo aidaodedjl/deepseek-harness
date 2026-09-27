@@ -68,6 +68,20 @@ describe('RepositoryCleaner', () => {
     expect(existsSync(join(root, 'products/shell/lib'))).toBe(true)
   })
 
+  it('removes types-only test aggregate outputs declared as *-types outDirs', async () => {
+    const root = fixture()
+    write(join(root, 'apps/desktop/src/keyboard.ts'), 'export {}\n')
+    write(join(root, 'tsconfig.json'), JSON.stringify({
+      compilerOptions: { outDir: 'lib/desktop-keyboard-test-types' },
+      files: ['apps/desktop/src/keyboard.ts'],
+    }))
+    write(join(root, 'lib/desktop-keyboard-test-types/apps/desktop/src/keyboard.d.ts'))
+
+    await new RepositoryCleaner(root).clean()
+
+    expect(existsSync(join(root, 'lib/desktop-keyboard-test-types'))).toBe(false)
+  })
+
   it('removes the native Landlock entry output and solution build info', async () => {
     const root = fixture()
     const entry = 'native/system/packages/entry'
