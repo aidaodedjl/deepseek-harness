@@ -55,7 +55,7 @@ pnpm run typecheck
 
 ### TypeScript 项目布局
 
-仓库使用相互隔离的 Host 与 Client aggregate。普通包只登记进其中一个 aggregate；Host 包进入 `tsconfig.host.json`，Client 包进入 `tsconfig.client.json`；`host/webserver`、`compaction/compaction` 与 `typert/registry` 三个包被两个 aggregate 同时引用，作为共享 leaf，让两侧对同一份源码做类型检查。仅产类型的程序（例如 `tsconfig.desktop-keyboard-tests.json`）从 aggregate 被引用，outDir 声明为 `*-types`，只发射声明文件；`pnpm run clean` 只移除该 outDir 目录本身，普通包的 `lib/types` outDir 则连同父级 `lib/` 一起移除。
+仓库使用相互隔离的 Host 与 Client aggregate。普通包只登记进其中一个 aggregate；Host 包进入 `tsconfig.host.json`，Client 包进入 `tsconfig.client.json`；`host/webserver`、`compaction/compaction` 与 `typert/registry` 三个包被两个 aggregate 同时引用，作为共享 leaf，让两侧对同一份源码做类型检查。仅产类型的程序（例如 `tsconfig.desktop-keyboard-tests.json`）从 aggregate 被引用，outDir 声明为 `*-types`，只发射声明文件；`pnpm run clean` 只移除该 outDir 目录本身，普通包的 `lib/types` outDir 则连同父级 `lib/` 一起移除，native 入口产物按声明移除。
 
 | 文件 | 角色 | 是否构成 program？ |
 |---|---|---|

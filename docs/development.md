@@ -51,7 +51,7 @@ Setup is complete when `pnpm run typecheck` exits successfully.
 
 ### TypeScript project layout
 
-The repository uses isolated Host and Client aggregates. An ordinary package is registered in exactly one aggregate: Host packages in `tsconfig.host.json` and Client packages in `tsconfig.client.json`; three packages (`host/webserver`, `compaction/compaction`, `typert/registry`) are referenced by both aggregates as shared leaves so each side type-checks the same source. A types-only program (for example `tsconfig.desktop-keyboard-tests.json`) is referenced from an aggregate and declares a `*-types` outDir for declaration-only emit; `pnpm run clean` removes that outDir directory itself, while an ordinary `lib/types` outDir is removed together with its parent `lib/`.
+The repository uses isolated Host and Client aggregates. An ordinary package is registered in exactly one aggregate: Host packages in `tsconfig.host.json` and Client packages in `tsconfig.client.json`; three packages (`host/webserver`, `compaction/compaction`, `typert/registry`) are referenced by both aggregates as shared leaves so each side type-checks the same source. A types-only program (for example `tsconfig.desktop-keyboard-tests.json`) is referenced from an aggregate and declares a `*-types` outDir for declaration-only emit; `pnpm run clean` removes that outDir directory itself, while an ordinary `lib/types` outDir is removed together with its parent `lib/`, and the native entry output is removed as declared.
 
 | File | Role | Forms a program? |
 |---|---|---|
